@@ -1,0 +1,40 @@
+//The intuition behind this approach is to use two passes to distribute candies to children. 
+//In the first pass, we traverse the ratings from left to right and assign candies to each child based on the ratings of the previous child. 
+//If the rating of the current child is higher than the previous child, we assign one more candy than the previous child. 
+//Otherwise, we assign one candy. In the second pass, we traverse the ratings from right to left and update the candies assigned to each child based on the ratings of the next child. 
+//If the rating of the current child is higher than the next child, we assign one more candy than the next child. We take the maximum of the candies assigned in both passes for each child and return the sum of all candies assigned.
+
+class Solution {
+    public int candy(int[] ratings) {
+ if (ratings == null || ratings.length == 0) 
+        {
+            return 0;
+        }
+        int [] left = new int [ratings.length];
+        left[0]=1;
+        //left to right
+        for(int i=1;i<ratings.length;i++){
+            if(ratings[i] > ratings[i-1] ){
+                left[i]= left[i-1]+1;
+            }
+            else{
+                left[i]=1;
+            }
+        } 
+        int result = left[ratings.length-1];
+
+        //right to left
+        int [] right = new int[ratings.length-1];
+        for(int i=ratings.length-2; i>=0;i--){
+            int curr=1;
+
+           if (ratings[i] > ratings[i + 1]) 
+            {
+                curr = left[i + 1] + 1;
+            }
+            result += Math.max(curr, left[i]);
+            left[i] = curr;
+        }
+        return result;
+    }
+}
